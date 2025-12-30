@@ -1,39 +1,60 @@
-# SushiSwap Logo
+# StackSwap Token Logos
+
+This directory contains token logos for tokens listed on StackSwap DEX.
 
 ## Requirements
 
-- Logo extension should be jpg
-- It should be 128x128 exactly, no larger, no smaller
-- It should be named by the checksummed address of the token
+- Logo extension should be **PNG** or **JPG**
+- Image should be **128x128 pixels** exactly (no larger, no smaller)
+- File should be named using the full Stacks token contract address
+- Logo should be clear and recognizable at small sizes
 
-## Checksummed address
+## Token Contract Address Format
 
-Using weth as an example, the checksummed token address is 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2, often when looking these address up they may or may not already be checksummed. It's important that they're verified. You can do this with a tool like https://ethsum.netlify.app/
+For Stacks blockchain tokens (SIP-010), addresses follow this format:
+```
+<deployer-address>.<contract-name>
+```
 
-If you were to put a non-checksummed for wrapped ether 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 into the checksum tool it will turn into the checksummed 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2.
+**Example:**
+- STSW Token: `SP3K8BC0PPEVCV7NZ6QSRWPQ2JE9E5B6N3PA0KBR9.token-stsw`
+- wSTX Token: `SP3K8BC0PPEVCV7NZ6QSRWPQ2JE9E5B6N3PA0KBR9.token-wstx`
 
-## Adding a token logo
+## Adding a Token Logo
 
-1. If adding a token logo for a network which does not yet exist, add a new folder named afer the network in the network folder of this repository. e.g. ethereum
+1. **Prepare your logo:**
+   - Create a 128x128 pixel image (PNG or JPG format)
+   - Ensure the logo is clear and centered
+   - Use transparent background for PNG files when possible
 
-2. Using wrapped ether as an example, you would add this to the etheruem folder, and it should be named by the token address, and extension should be jpg. e.g. 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2.jpg
+2. **Name the file:**
+   - Use the full Stacks contract address as the filename
+   - Replace `.` (dots) with `_` (underscores) in the filename
+   - Add the appropriate file extension
 
-## Invalidate cache of a single token
+   **Example:**
+   ```
+   SP3K8BC0PPEVCV7NZ6QSRWPQ2JE9E5B6N3PA0KBR9_token-stsw.png
+   ```
 
-node . invalidate:token xdai 0x9C58BAcC331c9aa871AFD802DB6379a98e80CEdb
+3. **Submit your logo:**
+   - Add the logo file to the appropriate network folder
+   - For Stacks mainnet: `/assets/logos/token-logos/stacks/`
+   - For Stacks testnet: `/assets/logos/token-logos/stacks-testnet/`
+   - Submit a pull request with your addition
 
-## Invalidate cache of all tokens on one network by network name
+## Directory Structure
 
-node . invalidate:network arbitrum
+```
+token-logos/
+├── stacks/           # Stacks mainnet token logos
+├── stacks-testnet/   # Stacks testnet token logos
+└── README.md         # This file
+```
 
-## Invalidate cache of all tokens for one network by chainId
+## Guidelines
 
-node . invalidate:network 250
-
-## Invalidate cache of all tokens of all networks
-
-node . invalidate:all
-
-## Clone token to network
-
-node . clone gno xdai 0x9C58BAcC331c9aa871AFD802DB6379a98e80CEdb
+- Only SIP-010 compliant tokens are accepted
+- Logos must be appropriate and professional
+- No copyrighted material without permission
+- The StackSwap team reserves the right to reject inappropriate logos
