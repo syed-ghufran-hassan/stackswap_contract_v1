@@ -47,12 +47,15 @@ Ethereum : 0x1C98B54d673C026C8286bADCa3E840aaf72931a3
 Polygon (Womhole) : 0xFC77cC32e570bAeC16f69DDed556a35811b5A6ce 
 
 ### Bridge
-STX <-> ETH : Comming Soon
+STX <-> ETH : Coming Soon
 ETH <-> Polygon : https://www.portalbridge.com/
 
 ## Future Works
-Multiple AMM choices /
-Connect advance trading funcionalities /
-Advanced governance features
+
+- **Multiple AMM choices**: Support for different Automated Market Maker algorithms
+- **Advanced trading functionalities**: Limit orders, stop-loss, and advanced trading features
+- **Enhanced governance**: Advanced DAO governance features and voting mechanisms
+- **Cross-chain bridge**: STX <-> ETH token bridge integration
+- **Analytics dashboard**: Comprehensive trading analytics and portfolio tracking
 
 
