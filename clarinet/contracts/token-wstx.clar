@@ -6,6 +6,12 @@
 
 (define-data-var deployer-principal principal tx-sender)
 
+;; Map to track allowances: {owner, spender} -> amount
+(define-map allowances 
+    { owner: principal, spender: principal } 
+    uint
+)
+
 ;; get the token balance of owner
 (define-read-only (get-balance (owner principal))
   (begin
@@ -56,5 +62,53 @@
     (try! (stx-transfer? amount tx-sender to))
     (match memo to-print (print to-print) 0x)
     (ok true)
+  )
+)
+
+;; Approve a spender to transfer up to a certain amount
+(define-public (approve (spender principal) (amount uint))
+  (begin
+    ;; Allow any owner (tx-sender) to approve a spender
+    (map-set allowances { owner: tx-sender, spender: spender } amount)
+    (print { action: "approve", owner: tx-sender, spender: spender, amount: amount })
+    (ok true)
+  )
+)
+
+;; Transfer tokens from owner to recipient using allowance
+(define-public (transfer-from (owner principal) (recipient principal) (amount uint))
+  (let ((current-allowance (default-to u0 (map-get? allowances { owner: owner, spender: tx-sender }))))
+    (begin
+      (asserts! (>= current-allowance amount) (err PERMISSION_DENIED_ERROR))
+      ;; Perform the STX transfer
+      (try! (stx-transfer? amount owner recipient))
+      ;; Reduce the allowance
+      (map-set allowances { owner: owner, spender: tx-sender } (- current-allowance amount))
+      (print { action: "transfer-from", spender: tx-sender, owner: owner, recipient: recipient, amount: amount })
+      (ok true)
+    )
+  )
+)
+
+;; Increase a spender's allowance by a specified amount
+(define-public (increase-allowance (spender principal) (added-amount uint))
+  (let ((current-allowance (default-to u0 (map-get? allowances { owner: tx-sender, spender: spender }))))
+    (begin
+      (map-set allowances { owner: tx-sender, spender: spender } (+ current-allowance added-amount))
+      (print { action: "increase-allowance", owner: tx-sender, spender: spender, added-amount: added-amount })
+      (ok true)
+    )
+  )
+)
+
+;; Decrease a spender's allowance by a specified amount
+(define-public (decrease-allowance (spender principal) (subtracted-amount uint))
+  (let ((current-allowance (default-to u0 (map-get? allowances { owner: tx-sender, spender: spender }))))
+    (begin
+      (asserts! (>= current-allowance subtracted-amount) (err PERMISSION_DENIED_ERROR))
+      (map-set allowances { owner: tx-sender, spender: spender } (- current-allowance subtracted-amount))
+      (print { action: "decrease-allowance", owner: tx-sender, spender: spender, subtracted-amount: subtracted-amount })
+      (ok true)
+    )
   )
 )
